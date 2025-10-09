@@ -1,0 +1,62 @@
+{
+  "options": {
+    "step": {
+      "init": {
+        "title": "选择设备",
+        "description": "请选择要接入的设备，提交后即可在『vivo 智慧生活』app 中使用。",
+        "data": {
+          "deviceList": "点击此处选择要接入的设备"
+        }
+      },
+      "qrcode_show": {
+        "title": "二维码配置",
+        "description": "### 请扫码以下二维码以继续配置\n![二维码](data:image/png;base64,{img_base64})\n **（有效期{time_out}{time_unit}）**",
+        "data": {
+          "proceed": "我已完成扫码"
+        }
+      },
+      "finish": {
+        "title": "vivo智慧生活配置中",
+        "description": "等待配置完成或退出手机端配置则可以启动扫描配置"
+      }
+    },
+    "progress": {
+      "wait_for_scanned": "### 请使用『vivo 智慧生活』V6.0.0.0及以上版本扫码\n(注意:关闭此页面可使用App端自动绑定)\n ![二维码](data:image/png;base64,{img_base64}) \n **（有效期{time_out}{time_unit}）**"
+    },
+    "error": {
+      "important_notes_not_agree": "请确认风险须知。",
+      "network_error": "网络异常，请稍后重试，[{code}]"
+    },
+    "abort": {
+      "bridge_device_disable": "## 桥设备被禁用 \n\n\r请先在\"集成条目\"->\"1个服务\"->\"服务信息\"->\"启用\"来开启桥设备的功能",
+      "integration_not_init": "## 提示 \n\n\r集成正在启动中，请稍后再试。",
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
+      "timeout_abort": "二维码超时，请重新配置集成",
+      "network_abort": "网络异常，请稍后重试",
+      "wait_config": "\tvivo智慧生活配置中\r\n等待手机配置完成或退出手机端配置则可以启动扫码配置"
+    }
+  },
+  "config": {
+    "step": {
+      "user": {
+        "title": "集成须知",
+        "description": "连接万物，只为懂您。欢迎使用\"vivohomebridge\"。\n\n**请阅读相关集成风险须知**: {note_url}",
+        "data": {
+          "important_notes": "我已悉知以上风险并自愿承担因使用集成所带来的相关风险。"
+        }
+      }
+    },
+    "progress": {
+      "wait_for_scanned": "### 请使用『vivo 智慧生活』V6.0.0.0及以上版本扫码 \n![二维码](data:image/png;base64,{img_base64}) \n **（有效期{time_out}{time_unit}）**"
+    },
+    "error": {
+      "important_notes_not_agree": "请确认风险须知。",
+      "network_error": "网络异常，请稍后重试，[{code}]"
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
+      "timeout_abort": "二维码超时，请重新配置集成",
+      "network_abort": "网络异常，请稍后重试"
+    }
+  }
+}
