@@ -3,7 +3,7 @@
     "step": {
       "init": {
         "title": "Select Device",
-        "description": "Please select the device. After submission, you can use it in the 'vivo Jovi' app.",
+        "description": "Please select the device. After submission, you can use it in the 'vivo JoviInLife' app.",
         "data": {
           "deviceList": "Click here to select the device to be bridged"
         }
@@ -28,7 +28,7 @@
       "title": "QR Code Configuration"
     },
     "progress": {
-      "wait_for_scanned": "### Please use **vivo Jovi App** (above V6.0.0.0)to scan the QR code below \n![QR Code](data:image/png;base64,{img_base64}) \n(only valid for {time_out}{time_unit})"
+      "wait_for_scanned": "### Please use **vivo JoviInLife App** (above V6.0.0.0)to scan the QR code below \n![QR Code](data:image/png;base64,{img_base64}) \n(only valid for {time_out}{time_unit})"
     },
     "abort": {
       "bridge_device_disable": "## the bridge device is disable\n\n\rYou need to make it enable firstly",
@@ -53,7 +53,7 @@
       }
     },
     "progress": {
-      "wait_for_scanned": "### Please use **vivo Jovi App** (above V6.0.0.0)to scan the QR code below \n![QR Code](data:image/png;base64,{img_base64}) \n(only valid for {time_out}{time_unit})"
+      "wait_for_scanned": "### Please use **vivo JoviInLife App** (above V6.0.0.0)to scan the QR code below \n![QR Code](data:image/png;base64,{img_base64}) \n(only valid for {time_out}{time_unit})"
     },
     "error": {
       "important_notes_not_agree": "Please confirm the risk notice.",

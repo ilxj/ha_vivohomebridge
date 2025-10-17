@@ -8,48 +8,128 @@
 import ctypes
 import os
 import platform
+import re
+import shlex
+import subprocess
+import sys
 import threading
 import json
 from ctypes import c_char_p, c_void_p, c_int, c_char, c_int, POINTER
-from typing import Callable, Optional
+from pathlib import Path
+from typing import Callable, Optional, Tuple
 import logging
 
 _LOGGER = logging.getLogger("py_vhome")
 system = platform.system()
 machine = platform.machine()
 
-# vhome_lib = ctypes.CDLL(os.path.dirname(os.path.abspath(__file__))+"/libvhome_aarch64_1.0.0.so")
-if system == "Windows":
+def detect_arch(machine: str) -> str:
+    m = machine.lower()
+    if m in ("x86_64", "amd64"):
+        return "x86_64"
+    if m in ("aarch64", "arm64"):
+        return "aarch64"
+    if m in ("armv7l", "armv7", "armhf"):
+        return "armv7"
+    if m in ("armv6l", "armv6", "armel"):
+        return "armv6"
+    if m in ("i386", "i686", "x86"):
+        return "x86"
+    return m
+
+def safe_process_run(cmd: str, timeout: float = 2.0) -> str:
+    
     try:
-        if machine == "AMD64":
-            vhome_lib = ctypes.CDLL(
-                os.path.dirname(os.path.abspath(__file__))
-                + "/libvhome_windows_x86_64_1.0.0.dll"
-            )
+        mproc = subprocess.run(
+            shlex.split(cmd),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=timeout,
+            check=False,
+            text=True,
+        )
+        return mproc.stdout or ""
+    except Exception as e:
+        _LOGGER.error(f"Failed run process: {e}")
+        return ""
+
+def detect_libc() -> str:
+    
+    out = safe_process_run("ldd --version")
+    s = out.lower()
+    if "musl" in s:
+        return "musl"
+    if "glibc" in s or "gnu c library" in s or "gnu libc" in s:
+        return "glibc"
+    
+    lname, lver = platform.libc_ver()
+    if lname:        
+        lname_l = lname.lower()
+        if "glibc" in lname_l or "gnu" in lname_l:
+            return "glibc"
+        if "musl" in lname_l:
+            return "musl"
+    
+    linker_candidates = [
+        "/lib/ld-musl-x86_64.so.1",
+        "/lib/ld-musl-aarch64.so.1",
+        "/lib/ld-musl-armhf.so.1",
+        "/lib/ld-musl-arm.so.1",
+        "/lib64/ld-linux-x86-64.so.2",
+        "/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "/lib/ld-linux-aarch64.so.1",
+        "/lib/aarch64-linux-gnu/ld-linux-aarch64.so.1",
+    ]
+    for p in linker_candidates:
+        if Path(p).exists():
+            return "musl" if "musl" in p else "glibc"
+
+    return "unknown"  
+
+def detect_platform() -> Tuple[str, str, Optional[str]]:
+    sysplat = sys.platform
+    arch = detect_arch(machine)
+
+    if sysplat.startswith("win"):
+        return ("windows", arch, None)
+    elif sysplat.startswith("linux"):
+        libc = detect_libc()
+        return ("linux", arch, libc)
+    else:
+        return (sysplat, arch, libc)
+
+def build_library_filename(base: str, os_name: str, arch: str, libc: Optional[str], libVersion: str) -> str:
+    if os_name == "windows":
+        # libvhome_windows_x86_64_1.0.0.dll
+        return f"{base}_windows_{arch}_{libVersion}.dll"
+    elif os_name == "linux":
+        if arch == "aarch64":
+            # libvhome_linux_aarch64_1.0.0.so
+            return f"{base}_linux_aarch64_{libVersion}.so"
+        elif arch == "armv7":
+            # libvhome_linux_arm7_1.0.0.so
+            return f"{base}_linux_armv7_{libVersion}.so"
+        elif arch == "armv6":
+            # libvhome_linux_arm6_1.0.0.so
+            return f"{base}_linux_armv6_{libVersion}.so"
         else:
-            raise Exception("Unsupported machine: {}".format(machine))
-    except OSError as e:
-        _LOGGER.error(f"Failed to load library: {e}")
-        raise Exception("Failed to load library: {}".format(e))
-elif system == "Linux":
-    try:
-        if machine == "x86_64":
-            vhome_lib = ctypes.CDLL(
-                os.path.dirname(os.path.abspath(__file__))
-                + "/libvhome_linux_x86_64_1.0.0.so"
-            )
-        elif machine == "aarch64":
-            vhome_lib = ctypes.CDLL(
-                os.path.dirname(os.path.abspath(__file__))
-                + "/libvhome_linux_aarch64_1.0.0.so"
-            )
-        else:
-            raise Exception("Unsupported machine: {}".format(machine))
-    except OSError as e:
-        _LOGGER.error(f"Failed to load library: {e}")
-        raise Exception("Failed to load library: {}".format(e))
-else:
-    raise Exception("Unsupported system: {}".format(system))
+            libc_tag = libc if libc in ("glibc", "musl") else "unknown"
+            #libvhome_linux_glibc_x86_64_1.0.0.so libvhome_linux_musl_x86_64_1.0.0.so
+            return f"{base}_linux_{libc_tag}_{arch}_{libVersion}.so"
+    else:
+        return f"{base}_{os_name}_{arch}_{libVersion}.so"
+
+def lib_name(base_name: str, libVersion: str)-> str:
+    os_name, arch, libc = detect_platform()
+    return build_library_filename(base_name, os_name, arch, libc, libVersion)
+
+libpath = os.path.dirname(os.path.abspath(__file__)) + "/" + lib_name("libvhome", "1.0.0")
+
+try:
+    vhome_lib = ctypes.CDLL(libpath)
+except OSError as e:
+    _LOGGER.error(f"Failed to load library: {e}")
+    raise Exception("Failed to load library: {}".format(e))
 
 """void vhome_init(char *url)"""
 vhome_lib.vhome_init.restype = None
