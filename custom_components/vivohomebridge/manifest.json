@@ -2,10 +2,10 @@
   "domain": "vivohomebridge",
   "name": "vivohomebridge",
   "icon": "robot-vacuum",
-  "version": "0.0.1.0",
+  "version": "0.0.1.1",
   "config_flow": true,
   "single_config_entry": true,
-  "documentation": "https://github.com/vivo/ha_vivohomebridge/blob/main/README_ZH.md",
+  "documentation": "https://github.com/vivo/ha_vivohomebridge/blob/main/README.md",
   "after_dependencies": [
     "zeroconf"
   ],
