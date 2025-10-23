@@ -1,0 +1,26 @@
+name: Release Package on New Release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  package:
+    runs-on: ubuntu-latest  # 使用最新的 Ubuntu 环境
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # 获取当前仓库代码
+
+      - name: Create vivohomebridge-${{ github.event.release.tag_name }}.zip
+        run: |
+          cd ${{ github.workspace }}/custom_components/vivohomebridge
+          zip -r vivohomebridge-${{ github.event.release.tag_name }}.zip ./
+          ls -lh vivohomebridge-${{ github.event.release.tag_name }}.zip
+
+      - name: Upload release package to GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          files: ${{ github.workspace }}/custom_components/vivohomebridge/vivohomebridge-${{ github.event.release.tag_name }}.zip
+
