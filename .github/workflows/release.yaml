@@ -20,9 +20,12 @@ jobs:
           ls -lh vivohomebridge-${{ github.event.release.tag_name }}.zip
 
       - name: Upload release package to GitHub release
-        uses: ghena/github-release-action@v1.2.0
+        uses: svenstaro/upload-release-action@v2
         with:
-          tag_name: ${{ github.event.release.tag_name }}
-          files: ${{ github.workspace }}/custom_components/vivohomebridge/vivohomebridge-${{ github.event.release.tag_name }}.zip
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          overwrite: true
+          file: ${{ github.workspace }}/custom_components/vivohomebridge/vivohomebridge-${{ github.event.release.tag_name }}.zip
+          
+
 
