@@ -24,9 +24,6 @@
       "important_notes_not_agree": "Please confirm the risk notice.",
       "network_error": "Network error, please try again later.[{code}]"
     },
-    "qrcode_show": {
-      "title": "QR Code Configuration"
-    },
     "progress": {
       "wait_for_scanned": "### Please use **vivo JoviInLife App** (above V6.0.0.0)to scan the QR code below \n![QR Code](data:image/png;base64,{img_base64}) \n(only valid for {time_out}{time_unit})"
     },
@@ -36,7 +33,7 @@
       "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
       "timeout_abort": "QR code timed out, please start the integration again",
       "network_abort": "Network error, please try again later",
-      "wait_config": "\tIn vivo Smart Life configuration \r\nWait for phone configuration to complete or exit phone configuration to start QR code scanning configuration"
+      "wait_config": "In vivo Smart Life configuration\r\nWait for phone configuration to complete or exit phone configuration to start QR code scanning configuration"
     }
   },
   "config": {
@@ -47,9 +44,6 @@
         "data": {
           "important_notes": "I have known the above risks and voluntarily bear the relevant risks brought by using the integration."
         }
-      },
-      "qrcode_show": {
-        "title": "QR Code Configuration"
       }
     },
     "progress": {
