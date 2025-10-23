@@ -70,16 +70,16 @@ class Utils:
     
     @staticmethod
     async def get_device_id_from_entity_id(hass, entity_id):
-        # »ñÈ¡ÊµÌå×¢²á±í
+        # è·å–å®ä½“æ³¨å†Œè¡¨
         entity_registry = er.async_get(hass)
         
-        # Í¨¹ıentity_id»ñÈ¡ÊµÌå×¢²áĞÅÏ¢
+        # é€šè¿‡entity_idè·å–å®ä½“æ³¨å†Œä¿¡æ¯
         entity_entry = entity_registry.async_get(entity_id)
         
         if entity_entry is None:
             return None
         
-        # ´ÓÊµÌåĞÅÏ¢ÖĞ»ñÈ¡device_id
+        # ä»å®ä½“ä¿¡æ¯ä¸­è·å–device_id
         return entity_entry.device_id
 
     @staticmethod
