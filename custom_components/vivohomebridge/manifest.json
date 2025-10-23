@@ -1,19 +1,19 @@
 {
   "domain": "vivohomebridge",
   "name": "vivohomebridge",
-  "icon": "robot-vacuum",
-  "version": "0.0.1.1",
-  "config_flow": true,
-  "single_config_entry": true,
-  "iot_class": "cloud_polling",
-  "documentation": "https://github.com/vivo/ha_vivohomebridge/blob/main/README.md",
   "after_dependencies": [
     "zeroconf"
   ],
+  "codeowners": [
+    "@AlexLin"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/vivo/ha_vivohomebridge/blob/main/README.md",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/vivo/ha_vivohomebridge/issues",
   "requirements": [
     "qrcode[pil]"
   ],
-  "codeowners": [
-    "@AlexLin"
-  ]
+  "single_config_entry": true,
+  "version": "0.0.1.1"
 }
