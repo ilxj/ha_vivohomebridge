@@ -119,6 +119,9 @@ class VSensorModel:
 
     def h2v_person_move(self, device_id: str, index: int, attributes_map_item: dict, val):
         VLog.info(_TAG, f"[h2v_person_move]{val}")
+        # Convert "on"/"off" to True/False
+        if val in ["on", "off"]:
+            return val == "on"
         return val
 
     def h2v_door(self, device_id: str, index: int, attributes_map_item: dict, val):
